@@ -44,18 +44,24 @@ function CreateTask ({ addTask }) {
 function Todo() {
     const [tasksRemaining, setTasksRemaining] = useState(0);
     const [tasks, setTasks] = useState([]);
-   
-    useEffect (() => {
-        saveLocalTodos();
-    }, [tasks]);
-
-    useEffect(() => {
-    getLoacalTodos();
-  }, [])
 
     useEffect (() => {
         setTasksRemaining(tasks.filter(task => !task.completed).length)
     });
+    
+    //Save to local
+    useEffect(() => {
+    const json = localStorage.getItem("tasks");
+    const loadedTasks = JSON.parse(json);
+    if (loadedTasks) {
+      setTasks(loadedTasks);
+    }
+    }, []);
+
+    useEffect(() => {
+    const json = JSON.stringify(tasks);
+    localStorage.setItem("tasks", json);
+    }, [tasks]);
 
     const addTask = title => {
         const newTasks = [...tasks, { title, completed: false}];
@@ -72,22 +78,6 @@ function Todo() {
         const newTasks = [...tasks];
         newTasks.splice(index, 1);
         setTasks(newTasks);
-    };
-
-    // Save to local
-    const saveLocalTodos = () => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-    //console.log(tasks);
-    };
-
-    const getLoacalTodos = () => {
-        if(localStorage.getItem("tasks") === null) {
-        localStorage.setItem("tasks", JSON.stringify([]));
-        
-        }else { 
-            let todoLocal = JSON.parse(localStorage.getItem("tasks"));
-            setTasks(todoLocal);
-        }
     };
 
     return (
