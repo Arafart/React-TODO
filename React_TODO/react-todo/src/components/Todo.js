@@ -92,8 +92,6 @@ function Todo() {
                         key = {index}
                         completeTask={completeTask}
                         removeTask={removeTask}
-                        saveLocalTodos = {saveLocalTodos}
-                        getLoacalTodos = {getLoacalTodos}
                     />
                 ))}
             </div>
